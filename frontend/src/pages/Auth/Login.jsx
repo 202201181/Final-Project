@@ -9,7 +9,6 @@ import bg from "../../assets/login_half.png";
 import logo from "../../assets/play-box-logo.png";
 import Cookies from "js-cookie"; // Import js-cookie
 
-
 const Login = () => {
   const [formData, setFormData] = useState({
     email: "",
@@ -27,9 +26,11 @@ const Login = () => {
   const sp = new URLSearchParams(search);
   const redirect = sp.get("redirect") || "/";
 
-  if(Cookies.get("jwt")) {
-    navigate("/");
-  }
+  useEffect(() => {
+    if (userInfo) {
+      navigate(redirect);
+    }
+  }, [navigate, redirect, userInfo]);
 
   const validateForm = () => {
     const newErrors = {};
@@ -80,13 +81,13 @@ const Login = () => {
           pauseOnHover: true,
           draggable: true,
           onClose: () => {
-            navigate('/');
+            navigate("/");
           },
         });
 
         // Add a delay before navigation to ensure toast is visible
         setTimeout(() => {
-          navigate('/');
+          navigate("/");
         }, 2000);
       } catch (err) {
         toast.error(err?.data?.message || "Invalid email or password", {
